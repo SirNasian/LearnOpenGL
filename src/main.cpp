@@ -5,6 +5,8 @@
 #include <SDL3/SDL_log.h>
 #include <SDL3/SDL_video.h>
 
+#include "triangle.hpp"
+
 const int WINDOW_WIDTH  = 800;
 const int WINDOW_HEIGHT = 600;
 
@@ -22,8 +24,10 @@ int main() {
 	SDL_GLContext glcontext = SDL_GL_CreateContext(window);
 
 	gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress);
-	glad_glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+	glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+
+	Triangle triangle;
 
 	bool done = false;
 	while (!done) {
@@ -32,7 +36,9 @@ int main() {
 			if (event.type == SDL_EVENT_QUIT)
 				done = true;
 		}
+
 		glClear(GL_COLOR_BUFFER_BIT);
+		triangle.render();
 		SDL_GL_SwapWindow(window);
 	}
 
