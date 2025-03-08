@@ -3,13 +3,15 @@
 
 #include <glad/glad.h>
 
+#include "shader.hpp"
+
 class Triangle {
 	public:
 		GLfloat x, y, z;
 		Triangle(const GLfloat x, const GLfloat y, const GLfloat z);
 		void render();
 	private:
-		static GLuint shader;
+		static Shader shader;
 		static GLuint vao;
 		static GLuint vbo;
 		static GLuint uniform_offset;
