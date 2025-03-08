@@ -27,7 +27,7 @@ int main() {
 	glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
-	Triangle triangle;
+	Triangle t1(-0.5f, 0.0f, 0.0f), t2(0.5f, 0.0f, 0.0f);
 
 	bool done = false;
 	while (!done) {
@@ -38,7 +38,8 @@ int main() {
 		}
 
 		glClear(GL_COLOR_BUFFER_BIT);
-		triangle.render();
+		t1.render();
+		t2.render();
 		SDL_GL_SwapWindow(window);
 	}
 

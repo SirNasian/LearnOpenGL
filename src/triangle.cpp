@@ -3,7 +3,7 @@
 
 #include <glad/glad.h>
 
-GLfloat vertices[] = {
+static GLfloat vertices[] = {
 	-0.5f, -0.5f, 0.0f,
 	 0.5f, -0.5f, 0.0f,
 	 0.0f,  0.5f, 0.0f
@@ -12,8 +12,13 @@ GLfloat vertices[] = {
 GLuint Triangle::shader = 0;
 GLuint Triangle::vao = 0;
 GLuint Triangle::vbo = 0;
+GLuint Triangle::uniform_offset = 0;
 
-Triangle::Triangle() {
+Triangle::Triangle(const GLfloat x, const GLfloat y, const GLfloat z) {
+	this->x = x;
+	this->y = y;
+	this->z = z;
+
 	if (this->shader && this->vao && this->vbo)
 		return;
 
@@ -29,10 +34,13 @@ Triangle::Triangle() {
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)0);
 	glEnableVertexAttribArray(0);
+
+	this->uniform_offset = glGetUniformLocation(this->shader, "offset");
 }
 
 void Triangle::render() {
 	glBindVertexArray(this->vao);
 	glUseProgram(this->shader);
+	glUniform3f(this->uniform_offset, this->x, this->y, this->z);
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 }
