@@ -11,10 +11,6 @@ const char *getShaderTypeName(const GLenum shader_type) {
 	}
 }
 
-Shader::Shader(const char *vertex_source, const char *fragment_source, const char *shader_name) {
-	this->compile(vertex_source, fragment_source, shader_name);
-}
-
 Shader::~Shader() {
 	if (this->id) glDeleteProgram(this->id);
 }
