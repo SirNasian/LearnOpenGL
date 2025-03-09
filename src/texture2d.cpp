@@ -5,6 +5,7 @@ Texture2D::~Texture2D() {
 }
 
 void Texture2D::load(const GLubyte *data, GLsizei width, GLsizei height) {
+	if (this->id) glDeleteTextures(1, &this->id);
 	glGenTextures(1, &this->id);
 	this->bind(0);
 

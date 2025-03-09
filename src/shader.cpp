@@ -16,6 +16,7 @@ Shader::~Shader() {
 }
 
 void Shader::compile(const char *vertex_source, const char *fragment_source, const char *shader_name) {
+	if (this->id) glDeleteProgram(this->id);
 	this->id = glCreateProgram();
 	GLuint vertex_shader = this->compileShader(GL_VERTEX_SHADER, vertex_source, shader_name);
 	GLuint fragment_shader = this->compileShader(GL_FRAGMENT_SHADER, fragment_source, shader_name);
