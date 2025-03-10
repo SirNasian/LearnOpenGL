@@ -12,7 +12,7 @@ class Triangle {
 		glm::vec3 position;
 		Triangle(glm::vec3 position);
 		static void init();
-		void render();
+		void render(glm::mat4 camera, float time);
 	private:
 		static Shader shader;
 		static Texture2D texture;

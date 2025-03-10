@@ -1,8 +1,6 @@
 #include "triangle.hpp"
 
-#include <chrono>
-
-#include <glm/gtc/type_ptr.hpp>
+#include <glm/ext.hpp>
 
 static const GLfloat vertices[] = {
 	-0.5f, -0.5f, 0.0f,  0.0f, 0.0f,
@@ -53,13 +51,12 @@ void Triangle::init() {
 	_initialised = true;
 }
 
-void Triangle::render() {
-	unsigned int time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock().now().time_since_epoch()).count();
-
+void Triangle::render(glm::mat4 camera, float time) {
 	this->shader.use();
 	glm::mat4 transform(1.0f);
 	transform = glm::translate(transform, this->position);
-	transform = glm::rotate(transform, glm::radians(float((time / 8) % 360)), glm::vec3(0.0f, 0.0f, 1.0f));
+	transform = glm::rotate(transform, time, glm::vec3(0.0f, 0.0f, 1.0f));
+	transform = camera * transform;
 	glUniformMatrix4fv(_uniform_vertex_transform, 1, GL_FALSE, glm::value_ptr(transform));
 
 	this->texture.bind(0);
