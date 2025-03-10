@@ -1,5 +1,6 @@
 #include <glad/glad.h>
 
+#include <glm/glm.hpp>
 #include <SDL3/SDL_events.h>
 #include <SDL3/SDL_init.h>
 #include <SDL3/SDL_log.h>
@@ -27,7 +28,7 @@ int main() {
 	glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
-	Triangle t1(-0.5f, 0.0f, 0.0f), t2(0.5f, 0.0f, 0.0f);
+	Triangle t1(glm::vec3(-0.5f, 0.0f, 0.0f)), t2(glm::vec3(0.5f, 0.0f, 0.0f));
 
 	bool done = false;
 	while (!done) {

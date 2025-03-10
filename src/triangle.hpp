@@ -2,14 +2,15 @@
 #define TRIANGLE_HPP
 
 #include <glad/glad.h>
+#include <glm/glm.hpp>
 
 #include "shader.hpp"
 #include "texture2d.hpp"
 
 class Triangle {
 	public:
-		GLfloat x, y, z;
-		Triangle(const GLfloat x, const GLfloat y, const GLfloat z);
+		glm::vec3 position;
+		Triangle(glm::vec3 position);
 		static void init();
 		void render();
 	private:
@@ -23,7 +24,7 @@ namespace TriangleGLSL {
 	const static char *VERTEX_SOURCE = R"(
 		#version 330 core
 
-		uniform vec3 vertex_offset;
+		uniform mat4 vertex_transform;
 
 		layout (location = 0) in vec3 vertex_pos;
 		layout (location = 1) in vec2 vertex_uv;
@@ -32,7 +33,7 @@ namespace TriangleGLSL {
 
 		void main() {
 			fragment_uv = vertex_uv;
-			gl_Position = vec4(vertex_pos+vertex_offset, 1.0);
+			gl_Position = vertex_transform * vec4(vertex_pos, 1.0);
 		}
 	)";
 	const static char *FRAGMENT_SOURCE = R"(
