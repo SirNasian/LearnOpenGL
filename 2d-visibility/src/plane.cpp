@@ -39,10 +39,11 @@ static const char *_fragment_shader_source = R"(
 
 		if (distance > 0.5) return;
 
-		int max_steps = 1024;
-		vec2 direction = (cursor_position - fragment_uv);
+		vec2 direction = normalize(fragment_uv - cursor_position);
+		float step_size = length(direction) / 512;
+		int max_steps = int(length(fragment_uv - cursor_position) / step_size);
 		for (int i = 0; i < max_steps; i++)
-			if (texture(fragment_texture, fragment_uv + (i * direction / max_steps)).r > 0)
+			if (texture(fragment_texture, cursor_position + (i * direction * step_size)).r > 0)
 				return;
 
 		fragment_colour = vec4(1.0, 1.0, 1.0, 1.0) * colour_multiplier;
