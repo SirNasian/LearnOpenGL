@@ -1,6 +1,8 @@
 #include <glad/glad.h>
 #include <SDL3/SDL.h>
 
+#include "plane.hpp"
+
 int main() {
 	SDL_Window *window = SDL_CreateWindow("2D Visibility", 800, 600, SDL_WINDOW_OPENGL);
 	if (!window) {
@@ -14,6 +16,8 @@ int main() {
 	glViewport(0, 0, 800, 600);
 	glClearColor(0.1f, 0.15f, 0.2f, 1.0f);
 
+	Plane plane;
+
 	bool done = false;
 	while (!done) {
 		SDL_Event event;
@@ -25,6 +29,7 @@ int main() {
 		}
 
 		glClear(GL_COLOR_BUFFER_BIT);
+		plane.render();
 		SDL_GL_SwapWindow(window);
 	}
 
