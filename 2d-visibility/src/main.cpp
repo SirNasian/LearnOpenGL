@@ -1,10 +1,12 @@
+#include <cstdio>
+
 #include <glad/glad.h>
 #include <SDL3/SDL.h>
 
 #include "plane.hpp"
 
 int main() {
-	SDL_Window *window = SDL_CreateWindow("2D Visibility", 600, 600, SDL_WINDOW_OPENGL);
+	SDL_Window *window = SDL_CreateWindow("2D Visibility", 600, 600, SDL_WINDOW_OPENGL | SDL_WINDOW_TRANSPARENT);
 	if (!window) {
 		SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to create window: %s", SDL_GetError());
 		return 1;
@@ -14,7 +16,7 @@ int main() {
 
 	gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress);
 	glViewport(0, 0, 600, 600);
-	glClearColor(0.1f, 0.15f, 0.2f, 1.0f);
+	glClearColor(0.1f, 0.15f, 0.2f, 0.0f);
 
 	Plane plane;
 	float cursor_x, cursor_y;

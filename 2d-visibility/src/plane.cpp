@@ -29,10 +29,11 @@ static const char *_fragment_shader_source = R"(
 	void main() {
 		fragment_colour = vec4(0.0, 0.0, 0.0, 0.0);
 		float distance = length(cursor_position - fragment_uv);
-		float colour_multiplier = (0.8 - (distance * 1.6));
+		float inner_radius = 0.05;
+		float colour_multiplier = (1.0 - ((distance - inner_radius) / (0.5 - inner_radius)));
 
 		if (texture(fragment_texture, fragment_uv).r > 0.0) {
-			fragment_colour = vec4(1.0, 0.0, 0.0, 1.0) * colour_multiplier;
+			fragment_colour = vec4(1.0, 0.0, 0.0, 1.0); // * colour_multiplier;
 			return;
 		}
 
