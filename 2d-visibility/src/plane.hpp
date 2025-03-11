@@ -6,11 +6,12 @@
 class Plane {
 	public:
 		Plane();
-		void render();
+		void render(glm::vec2 cursor_position);
 	private:
 		glm::vec3 position;
-		void initShader();
 		void initMesh();
+		void initShader();
+		void initTexture();
 };
 
 #endif
