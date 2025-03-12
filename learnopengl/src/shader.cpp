@@ -49,6 +49,13 @@ void Shader::setUniformMatrix4fv(const GLchar *name, const GLsizei count, const 
 	glUniformMatrix4fv(location, count, GL_FALSE, glm::value_ptr(value));
 }
 
+static GLuint _id = 0;
+void Shader::use() {
+	if (this->id == _id) return;
+	glUseProgram(this->id);
+	_id = this->id;
+}
+
 GLuint Shader::compileShader(GLenum shader_type, const char *shader_source, const char *shader_name) {
 	GLuint shader = glCreateShader(shader_type);
 	glShaderSource(shader, 1, &shader_source, NULL);

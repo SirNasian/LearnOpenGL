@@ -15,7 +15,7 @@ class Shader {
 		GLuint getId() { return this->id; };
 		void setUniform1i(const GLchar *name, const GLint value);
 		void setUniformMatrix4fv(const GLchar *name, const GLsizei count, const glm::mat4 &value);
-		void use() { glUseProgram(this->id); };
+		void use();
 	private:
 		GLuint id = 0;
 		std::vector<std::pair<std::string, GLuint>> uniform_locations;
