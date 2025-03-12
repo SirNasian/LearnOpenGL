@@ -4,8 +4,8 @@
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 
-#include "shader.hpp"
-#include "texture2d.hpp"
+#include "../shader.hpp"
+#include "../texture2d.hpp"
 
 class Triangle {
 	public:

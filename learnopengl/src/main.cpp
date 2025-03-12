@@ -5,8 +5,8 @@
 #include <SDL3/SDL.h>
 
 #include "mesh/box.hpp"
+#include "mesh/triangle.hpp"
 #include "shader.hpp"
-#include "triangle.hpp"
 
 const int WINDOW_WIDTH  = 800;
 const int WINDOW_HEIGHT = 600;
