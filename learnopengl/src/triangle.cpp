@@ -8,15 +8,6 @@ static const GLfloat vertices[] = {
 	 0.0f,  0.5f, 0.0f,  0.5f, 1.0f,
 };
 
-static const GLubyte texture_data[] = {
-	0xFF, 0x00, 0xFF, 0xFF,
-	0x00, 0x00, 0x00, 0xFF,
-	0x00, 0x00, 0x00, 0xFF,
-	0xFF, 0x00, 0xFF, 0xFF,
-};
-
-Shader Triangle::shader;
-Texture2D Triangle::texture;
 GLuint Triangle::vao = 0;
 GLuint Triangle::vbo = 0;
 
@@ -26,8 +17,6 @@ Triangle::Triangle(glm::vec3 position) {
 }
 
 static bool _initialised = false;
-static GLuint _uniform_vertex_transform = 0;
-static GLuint _uniform_fragment_texture = 0;
 void Triangle::init() {
 	if (_initialised) return;
 
@@ -43,24 +32,20 @@ void Triangle::init() {
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
 
-	Triangle::shader.compile(TriangleGLSL::VERTEX_SOURCE, TriangleGLSL::FRAGMENT_SOURCE, "triangle");
-	Triangle::texture.load(texture_data, 2, 2);
-	_uniform_vertex_transform = glGetUniformLocation(Triangle::shader.getId(), "vertex_transform");
-	_uniform_fragment_texture = glGetUniformLocation(Triangle::shader.getId(), "fragment_texture");
-
 	_initialised = true;
 }
 
-void Triangle::render(glm::mat4 camera, float time) {
-	this->shader.use();
+void Triangle::render(Shader &shader, Texture2D &texture, const glm::mat4 &camera, const float time) {
 	glm::mat4 transform(1.0f);
 	transform = glm::translate(transform, this->position);
 	transform = glm::rotate(transform, time, glm::vec3(0.0f, 0.0f, 1.0f));
 	transform = camera * transform;
-	glUniformMatrix4fv(_uniform_vertex_transform, 1, GL_FALSE, glm::value_ptr(transform));
 
-	this->texture.bind(0);
-	glUniform1i(_uniform_fragment_texture, 0);
+	shader.use();
+	shader.setUniformMatrix4fv("vertex_transform", 1, glm::value_ptr(transform));
+	shader.setUniform1i("fragment_texture", 0);
+
+	texture.bind(0);
 
 	glBindVertexArray(this->vao);
 	glDrawArrays(GL_TRIANGLES, 0, 3);

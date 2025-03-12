@@ -4,10 +4,18 @@
 #include <glm/ext.hpp>
 #include <SDL3/SDL.h>
 
+#include "shader.hpp"
 #include "triangle.hpp"
 
 const int WINDOW_WIDTH  = 800;
 const int WINDOW_HEIGHT = 600;
+
+static const GLubyte texture_data[] = {
+	0xFF, 0x00, 0xFF, 0xFF,
+	0x00, 0x00, 0x00, 0xFF,
+	0x00, 0x00, 0x00, 0xFF,
+	0xFF, 0x00, 0xFF, 0xFF,
+};
 
 int main() {
 	SDL_Init(SDL_INIT_VIDEO);
@@ -27,6 +35,9 @@ int main() {
 	gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress);
 	glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+
+	Shader shader(BasicShaderSource::VERTEX, BasicShaderSource::FRAGMENT, "basic");
+	Texture2D texture(2, 2, texture_data);
 
 	Triangle triangles[] = {
 		Triangle(glm::vec3(-0.5f, 0.0f, 0.0f)),
@@ -66,7 +77,7 @@ int main() {
 		camera *= glm::lookAt(camera_position, camera_target, glm::vec3(0.0f, 1.0f, 0.0f));
 
 		for (Triangle &t : triangles)
-			t.render(camera, time);
+			t.render(shader, texture, camera, time);
 
 		SDL_GL_SwapWindow(window);
 	}

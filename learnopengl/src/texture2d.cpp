@@ -1,11 +1,6 @@
 #include "texture2d.hpp"
 
-Texture2D::~Texture2D() {
-	if (this->id) glDeleteTextures(1, &this->id);
-}
-
-void Texture2D::load(const GLubyte *data, GLsizei width, GLsizei height) {
-	if (this->id) glDeleteTextures(1, &this->id);
+Texture2D::Texture2D(const GLsizei width, const GLsizei height, const GLubyte *data) {
 	glGenTextures(1, &this->id);
 	this->bind(0);
 
@@ -16,6 +11,10 @@ void Texture2D::load(const GLubyte *data, GLsizei width, GLsizei height) {
 
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 	glGenerateMipmap(GL_TEXTURE_2D);
+}
+
+Texture2D::~Texture2D() {
+	glDeleteTextures(1, &this->id);
 }
 
 void Texture2D::bind(GLubyte unit) {

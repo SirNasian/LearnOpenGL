@@ -5,9 +5,8 @@
 
 class Texture2D {
 	public:
-		Texture2D() {};
+		Texture2D(const GLsizei width, const GLsizei height, const GLubyte *data);
 		~Texture2D();
-		void load(const GLubyte *data, GLsizei width, GLsizei  height);
 		void bind(GLubyte unit = 0);
 	private:
 		GLuint id = 0;

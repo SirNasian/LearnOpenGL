@@ -1,5 +1,7 @@
 #include "shader.hpp"
 
+#include <algorithm>
+
 #include <glad/glad.h>
 #include <SDL3/SDL_log.h>
 
@@ -11,12 +13,7 @@ const char *getShaderTypeName(const GLenum shader_type) {
 	}
 }
 
-Shader::~Shader() {
-	if (this->id) glDeleteProgram(this->id);
-}
-
-void Shader::compile(const char *vertex_source, const char *fragment_source, const char *shader_name) {
-	if (this->id) glDeleteProgram(this->id);
+Shader::Shader(const char *vertex_source, const char *fragment_source, const char *shader_name) {
 	this->id = glCreateProgram();
 	GLuint vertex_shader = this->compileShader(GL_VERTEX_SHADER, vertex_source, shader_name);
 	GLuint fragment_shader = this->compileShader(GL_FRAGMENT_SHADER, fragment_source, shader_name);
@@ -38,6 +35,20 @@ void Shader::compile(const char *vertex_source, const char *fragment_source, con
 	glDeleteShader(fragment_shader);
 }
 
+Shader::~Shader() {
+	glDeleteProgram(this->id);
+}
+
+void Shader::setUniform1i(const GLchar *name, const GLint value) {
+	const GLuint location = this->getUniformLocation(name);
+	glUniform1i(location, value);
+}
+
+void Shader::setUniformMatrix4fv(const GLchar *name, const GLsizei count, const GLfloat *value) {
+	const GLuint location = this->getUniformLocation(name);
+	glUniformMatrix4fv(location, count, GL_FALSE, value);
+}
+
 GLuint Shader::compileShader(GLenum shader_type, const char *shader_source, const char *shader_name) {
 	GLuint shader = glCreateShader(shader_type);
 	glShaderSource(shader, 1, &shader_source, NULL);
@@ -54,4 +65,14 @@ GLuint Shader::compileShader(GLenum shader_type, const char *shader_source, cons
 	}
 
 	return shader;
+}
+
+GLuint Shader::getUniformLocation(const GLchar *name) {
+	std::vector<std::pair<std::string, GLuint>>::iterator item = std::find_if(this->uniform_locations.begin(), this->uniform_locations.end(), [&name](const std::pair<std::string, GLuint> &item) { return std::string(name) == item.first; });
+	if (item == this->uniform_locations.end()) {
+		const GLuint location = glGetUniformLocation(this->id, name);
+		this->uniform_locations.push_back(std::pair<std::string, GLuint>(name, location));
+		return location;
+	}
+	return item->second;
 }
