@@ -10,7 +10,7 @@
 class Triangle {
 	public:
 		glm::vec3 position;
-		Triangle(glm::vec3 position);
+		Triangle(glm::vec3 position = glm::vec3());
 		static void init();
 		void render(Shader &shader, Texture2D &texture, const float time);
 	private:

@@ -38,7 +38,7 @@ void Triangle::init() {
 void Triangle::render(Shader &shader, Texture2D &texture, const float time) {
 	glm::mat4 transform(1.0f);
 	transform = glm::translate(transform, this->position);
-	transform = glm::rotate(transform, time, glm::vec3(0.0f, 0.0f, 1.0f));
+	transform = glm::rotate(transform, time, glm::vec3(0.0f, 1.0f, 0.0f));
 
 	shader.use();
 	shader.setUniformMatrix4fv("model_matrix", 1, transform);
