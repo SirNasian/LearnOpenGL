@@ -28,21 +28,20 @@ void Triangle::init() {
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)(0 * sizeof(GLfloat)));
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
 	glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
+	glEnableVertexAttribArray(2);
 
 	_initialised = true;
 }
 
-void Triangle::render(Shader &shader, Texture2D &texture, const glm::mat4 &camera, const float time) {
+void Triangle::render(Shader &shader, Texture2D &texture, const float time) {
 	glm::mat4 transform(1.0f);
 	transform = glm::translate(transform, this->position);
 	transform = glm::rotate(transform, time, glm::vec3(0.0f, 0.0f, 1.0f));
-	transform = camera * transform;
 
 	shader.use();
-	shader.setUniformMatrix4fv("vertex_transform", 1, glm::value_ptr(transform));
+	shader.setUniformMatrix4fv("model_matrix", 1, transform);
 	shader.setUniform1i("fragment_texture", 0);
 
 	texture.bind(0);

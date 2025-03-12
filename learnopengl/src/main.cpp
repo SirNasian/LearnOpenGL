@@ -37,6 +37,9 @@ int main() {
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
 	Shader shader(BasicShaderSource::VERTEX, BasicShaderSource::FRAGMENT, "basic");
+	shader.use();
+	shader.setUniformMatrix4fv("projection_matrix", 1, glm::perspective(glm::radians(45.0f), (float)WINDOW_WIDTH/WINDOW_HEIGHT, 0.1f, 100.0f));
+
 	Texture2D texture(2, 2, texture_data);
 
 	Triangle triangles[] = {
@@ -71,13 +74,12 @@ int main() {
 		float camera_distance = 6.0f;
 		glm::vec3 camera_position(camera_distance * sin(time), 3.0f, camera_distance * cos(time));
 		glm::vec3 camera_target(0.0f, 0.0f, 0.0f);
-		glm::mat4 camera(1.0f);
 
-		camera *= glm::perspective(glm::radians(45.0f), (float)WINDOW_WIDTH/WINDOW_HEIGHT, 0.1f, 100.0f);
-		camera *= glm::lookAt(camera_position, camera_target, glm::vec3(0.0f, 1.0f, 0.0f));
+		glm::mat4 view_matrix = glm::lookAt(camera_position, camera_target, glm::vec3(0.0f, 1.0f, 0.0f));
+		shader.setUniformMatrix4fv("view_matrix", 1, view_matrix);
 
 		for (Triangle &t : triangles)
-			t.render(shader, texture, camera, time);
+			t.render(shader, texture, time);
 
 		SDL_GL_SwapWindow(window);
 	}

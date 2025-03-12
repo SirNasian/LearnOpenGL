@@ -6,6 +6,7 @@
 #include <vector>
 
 #include <glad/glad.h>
+#include <glm/glm.hpp>
 
 class Shader {
 	public:
@@ -13,7 +14,7 @@ class Shader {
 		~Shader();
 		GLuint getId() { return this->id; };
 		void setUniform1i(const GLchar *name, const GLint value);
-		void setUniformMatrix4fv(const GLchar *name, const GLsizei count, const GLfloat *value);
+		void setUniformMatrix4fv(const GLchar *name, const GLsizei count, const glm::mat4 &value);
 		void use() { glUseProgram(this->id); };
 	private:
 		GLuint id = 0;
@@ -26,16 +27,19 @@ namespace BasicShaderSource {
 	const static char *VERTEX = R"(
 		#version 330 core
 
-		uniform mat4 vertex_transform;
+		uniform mat4 model_matrix;
+		uniform mat4 view_matrix;
+		uniform mat4 projection_matrix;
 
-		layout (location = 0) in vec3 vertex_pos;
-		layout (location = 1) in vec2 vertex_uv;
+		layout (location = 0) in vec3 vertex_position;
+		layout (location = 1) in vec3 vertex_normal;
+		layout (location = 2) in vec2 vertex_uv;
 
 		out vec2 fragment_uv;
 
 		void main() {
+			gl_Position = projection_matrix * view_matrix * model_matrix * vec4(vertex_position, 1.0);
 			fragment_uv = vertex_uv;
-			gl_Position = vertex_transform * vec4(vertex_pos, 1.0);
 		}
 	)";
 	const static char *FRAGMENT = R"(

@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-#include <glad/glad.h>
+#include <glm/ext.hpp>
 #include <SDL3/SDL_log.h>
 
 const char *getShaderTypeName(const GLenum shader_type) {
@@ -44,9 +44,9 @@ void Shader::setUniform1i(const GLchar *name, const GLint value) {
 	glUniform1i(location, value);
 }
 
-void Shader::setUniformMatrix4fv(const GLchar *name, const GLsizei count, const GLfloat *value) {
+void Shader::setUniformMatrix4fv(const GLchar *name, const GLsizei count, const glm::mat4 &value) {
 	const GLuint location = this->getUniformLocation(name);
-	glUniformMatrix4fv(location, count, GL_FALSE, value);
+	glUniformMatrix4fv(location, count, GL_FALSE, glm::value_ptr(value));
 }
 
 GLuint Shader::compileShader(GLenum shader_type, const char *shader_source, const char *shader_name) {
