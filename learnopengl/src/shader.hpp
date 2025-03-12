@@ -42,21 +42,26 @@ namespace BasicShaderSource {
 		void main() {
 			gl_Position = projection_matrix * view_matrix * model_matrix * vec4(vertex_position, 1.0);
 			world_position = vec3(model_matrix * vec4(vertex_position, 1.0));
-			world_normal = normalize(mat3(transpose(inverse(model_matrix))) * vertex_normal);
+			world_normal = mat3(transpose(inverse(model_matrix))) * normalize(vertex_normal);
 			fragment_uv = vertex_uv;
 		}
 	)";
 	const static char *FRAGMENT = R"(
 		#version 330 core
 
+		struct Material {
+			sampler2D texture;
+			vec3 emissive_colour;
+		};
+
 		struct Light {
 			vec3 position;
 		};
 
+		uniform Material material;
 		uniform Light[256] lights;
 		uniform int lights_count;
 		uniform vec3 camera_position;
-		uniform sampler2D fragment_texture;
 
 		in vec3 world_position;
 		in vec3 world_normal;
@@ -70,6 +75,7 @@ namespace BasicShaderSource {
 			vec3 diffuse_colour = vec3(0.0);
 			vec3 specular_colour = vec3(0.0);
 			vec3 camera_direction = normalize(camera_position - world_position);
+
 			for (int i = 0; i < lights_count; i++) {
 				vec3 light_direction = normalize(lights[i].position - world_position);
 				diffuse_colour += vec3(0.4) * max(dot(light_direction, world_normal), 0);
@@ -78,7 +84,10 @@ namespace BasicShaderSource {
 				specular_colour += vec3(0.5) * pow(max(dot(reflect_direction, camera_direction), 0), 64);
 			}
 
-			colour = texture(fragment_texture, fragment_uv) * vec4((ambient_colour + diffuse_colour + specular_colour), 1.0);
+			colour  = texture(material.texture, fragment_uv);
+			colour *= vec4((ambient_colour + diffuse_colour + specular_colour), 1.0);
+			if (dot(material.emissive_colour, material.emissive_colour) > 0.0)
+				colour = vec4(material.emissive_colour, 1.0);
 		}
 	)";
 }

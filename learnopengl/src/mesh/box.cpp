@@ -52,8 +52,9 @@ static const GLuint _indices[] = {
 	20, 21, 22, 21, 22, 23,
 };
 
-Box::Box(const glm::vec3 position) {
+Box::Box(const glm::vec3 position, const glm::vec3 scale) {
 	this->position = position;
+	this->scale = scale;
 
 	if (_vao) return;
 
@@ -80,11 +81,12 @@ Box::Box(const glm::vec3 position) {
 void Box::render(Shader &shader, Texture2D &texture, const float time) {
 	glm::mat4 model_matrix(1.0f);
 	model_matrix = glm::translate(model_matrix, this->position);
+	model_matrix = glm::scale(model_matrix, this->scale);
 	model_matrix = glm::rotate(model_matrix, time, glm::normalize(glm::vec3(1.0f, -1.0f, 0.0f)));
 
 	shader.use();
 	shader.setUniformMatrix4fv("model_matrix", 1, model_matrix);
-	shader.setUniform1i("fragment_texture", 0);
+	shader.setUniform1i("material.texture", 0);
 	texture.bind(0);
 
 	glBindVertexArray(_vao);

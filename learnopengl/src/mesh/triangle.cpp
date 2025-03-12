@@ -44,7 +44,7 @@ void Triangle::render(Shader &shader, Texture2D &texture, const float time) {
 
 	shader.use();
 	shader.setUniformMatrix4fv("model_matrix", 1, transform);
-	shader.setUniform1i("fragment_texture", 0);
+	shader.setUniform1i("material.texture", 0);
 
 	texture.bind(0);
 
