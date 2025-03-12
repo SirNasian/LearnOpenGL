@@ -3,9 +3,9 @@
 #include <glm/ext.hpp>
 
 static const GLfloat vertices[] = {
-	-0.5f, -0.5f, 0.0f,  0.0f, 0.0f, -1.0f,  0.0f, 0.0f,
-	 0.5f, -0.5f, 0.0f,  0.0f, 0.0f, -1.0f,  1.0f, 0.0f,
-	 0.0f,  0.5f, 0.0f,  0.0f, 0.0f, -1.0f,  0.5f, 1.0f,
+	-0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 1.0f,  0.0f, 0.0f,
+	 0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 1.0f,  1.0f, 0.0f,
+	 0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f,  0.5f, 1.0f,
 };
 
 GLuint Triangle::vao = 0;

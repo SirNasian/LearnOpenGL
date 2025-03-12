@@ -44,6 +44,9 @@ int main() {
 	shader.use();
 	shader.setUniformMatrix4fv("projection_matrix", 1, glm::perspective(glm::radians(45.0f), (float)WINDOW_WIDTH/WINDOW_HEIGHT, 0.1f, 100.0f));
 
+	glUniform3f(glGetUniformLocation(shader.getId(), "lights[0].position"), -2.0f, 0.0f, 2.0f);
+	glUniform1i(glGetUniformLocation(shader.getId(), "lights_count"), 1);
+
 	Texture2D texture(2, 2, texture_data);
 
 	Triangle triangles[] = {
@@ -80,14 +83,16 @@ int main() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		float camera_distance = 6.0f;
-		glm::vec3 camera_position(camera_distance * sin(time), 3.0f, camera_distance * cos(time));
+		glm::vec3 camera_position(camera_distance * sin(time), 0.0f, camera_distance * cos(time));
 		glm::vec3 camera_target(0.0f, 0.0f, 0.0f);
+		glUniform3fv(glGetUniformLocation(shader.getId(), "camera_position"), 1, glm::value_ptr(camera_position));
 
 		glm::mat4 view_matrix = glm::lookAt(camera_position, camera_target, glm::vec3(0.0f, 1.0f, 0.0f));
 		shader.setUniformMatrix4fv("view_matrix", 1, view_matrix);
 
-		for (Triangle &t : triangles) t.render(shader, texture, time);
-		for (Box &b : boxes) b.render(shader, texture, time);
+		for (Triangle &t : triangles) t.render(shader, texture, 0.0f);
+		for (Box &b : boxes) b.render(shader, texture, 0.0f);
+		Box(glm::vec3(-2.0f, 0.0f, 2.0f)).render(shader, texture, 0.0f);
 
 		SDL_GL_SwapWindow(window);
 	}
