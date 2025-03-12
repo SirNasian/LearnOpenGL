@@ -13,6 +13,7 @@ int main() {
 	}
 
 	SDL_GL_CreateContext(window);
+	SDL_GL_SetSwapInterval(0);
 
 	gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress);
 	glViewport(0, 0, 600, 600);
@@ -21,6 +22,8 @@ int main() {
 	Plane plane;
 	float cursor_x, cursor_y;
 
+	Uint64 _time = SDL_GetTicksNS();
+	Uint64 _rate_ns = (1.0f / 250.0f) * 1000000000.0f;
 	bool done = false;
 	while (!done) {
 		SDL_Event event;
@@ -30,6 +33,14 @@ int main() {
 				break;
 			}
 		}
+
+		Uint64 time = SDL_GetTicksNS();
+		if ((time - _time) < _rate_ns) {
+			SDL_DelayNS(_rate_ns - (time - _time));
+			continue;
+		}
+		printf("fps: %.3f latency: %.3fms\n", 1000000000.0f / (time - _time), (time - _time) / 1000000.0f);
+		_time = time;
 
 		SDL_GetMouseState(&cursor_x, &cursor_y);
 		cursor_x = 0.0f + (cursor_x / 600.0f);
