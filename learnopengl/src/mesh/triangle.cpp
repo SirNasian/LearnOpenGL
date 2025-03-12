@@ -3,9 +3,9 @@
 #include <glm/ext.hpp>
 
 static const GLfloat vertices[] = {
-	-0.5f, -0.5f, 0.0f,  0.0f, 0.0f,
-	 0.5f, -0.5f, 0.0f,  1.0f, 0.0f,
-	 0.0f,  0.5f, 0.0f,  0.5f, 1.0f,
+	-0.5f, -0.5f, 0.0f,  0.0f, 0.0f, -1.0f,  0.0f, 0.0f,
+	 0.5f, -0.5f, 0.0f,  0.0f, 0.0f, -1.0f,  1.0f, 0.0f,
+	 0.0f,  0.5f, 0.0f,  0.0f, 0.0f, -1.0f,  0.5f, 1.0f,
 };
 
 GLuint Triangle::vao = 0;
@@ -27,9 +27,11 @@ void Triangle::init() {
 	glBindBuffer(GL_ARRAY_BUFFER, Triangle::vbo);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)(0 * sizeof(GLfloat)));
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(0 * sizeof(GLfloat)));
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(6 * sizeof(GLfloat)));
 	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
 	glEnableVertexAttribArray(2);
 
 	_initialised = true;
